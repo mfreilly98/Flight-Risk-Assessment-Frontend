@@ -12,6 +12,12 @@
 	background-color: #000000;
 }
 
+.dash-btn {
+	background-color: #000000;
+	color:#FFF;
+	border-color: #FF0000;
+}
+
 .btn-default {
 	background-color: #6c757d;
 	color:#FFF;
