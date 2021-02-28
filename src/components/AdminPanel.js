@@ -100,22 +100,8 @@ class AdminPanel extends Component{
         this.switchView = this.switchView.bind(this);
     }
 
-    set(variable, value) {
-        if(value != null){
-            if(variable === "maxCross")
-                this.setState(prevState => ({
-                    max: {
-                        ...prevState.max,
-                        CrossWinds: value
-                    }
-                }));
-            if(variable === "midCross")
-                this.setState({midCrossWinds: value});
-            if(variable === "maxVis")
-                this.setState({maxVisibility: value});
-            if(variable === "midVis")
-                this.setState({midVisibility: value});
-        }
+    set(toSet, value) {
+        
     }
 
     switchView(panel){
@@ -266,7 +252,7 @@ class AdminPanel extends Component{
                     <b>Time</b>
                     <p>low: {this.state.ifr.enroute.time.low} | med: {this.state.ifr.enroute.time.med} | high: {'>'} {this.state.ifr.enroute.time.med}</p>
                     <b>Thunderstorm</b>
-                    <p>low: {this.state.ifr.enroute.thunderstorm.low} | med: {this.state.ifr.enroute.thunderstorm.med} | high: {this.state.ifr.enroute.thunderstorm.high}</p>
+                    <p>low: {this.state.ifr.enroute.thunderstorm.low} | med: {this.state.ifr.enroute.thunderstorm.med} | high: {'>'} {this.state.ifr.enroute.thunderstorm.med}</p>
                     <b>fuelAlt</b>
                     <p>low: {this.state.ifr.enroute.fuelAlt.low} | med: {this.state.ifr.enroute.fuelAlt.med} | high: {this.state.ifr.enroute.fuelAlt.high}</p>
                     <b>altAirfield</b>
