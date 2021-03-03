@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import './../stylesheets/AdminPanel.css';
-/*import SearchStudentForms from './SearchStudentForms';
-import CurrentSettings from './CurrentSettings';
-import SetLimits from './SetLimits';*/
 import {Jumbotron, Row, Col, Form, FormGroup, Button} from 'react-bootstrap';
 
 class AdminPanel extends Component{
