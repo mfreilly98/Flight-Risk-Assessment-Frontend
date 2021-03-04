@@ -1,5 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-datepicker/dist/react-datepicker.css';
+import './../stylesheets/AdminPanel.css';
 import RiskAssessmentForm from "./RiskAssessmentForm";
 import AdminPanel from "./AdminPanel"
 import {Row, Jumbotron, Button} from "react-bootstrap";
@@ -10,56 +9,60 @@ class HomePage extends Component{
 	constructor(props){
 		super(props);
 
-		this.state = ({display: "Home"});
+		this.state = ({displayPage: "Home"});
 
 		this.switchPage = this.switchPage.bind(this);
 	}
 
 	switchPage(page){
-		this.setState({display: page});
+		this.setState({displayPage: page});
 	}
 
 	home(){
-		<Row>
-			<Row>
-                    <Jumbotron fluid className="jumbo">
-                        <h1>Admin Panel</h1>
-                    </Jumbotron>
-                </Row>
-                <Row>
-                    <Button onClick={this.switchPage.bind(this, "Admin")}>Admin</Button>
-                    <Button onClick={this.switchPage.bind(this, "Form")}>Form</Button>
-                </Row>
-		</Row>
+		return(
+			<Row className="section">
+				<Row>
+						<Jumbotron fluid className="jumbo">
+							<h1>Admin Panel</h1>
+						</Jumbotron>
+					</Row>
+					<Row>
+						<Button className="btn dash-btn" onClick={this.switchPage.bind(this, "Admin")}>Admin</Button>
+						<Button className="btn dash-btn" onClick={this.switchPage.bind(this, "Form")}>Form</Button>
+					</Row>
+			</Row>
+		);
 	}
 
 	admin(){
 		return(
-			<AdminPanel />
+			<><AdminPanel />
+			<Button className="btn dash-btn" onClick={this.switchPage.bind(this, "Home")}>Back to Home</Button></>
 		);
 	}
 
 	form(){
 		return(
-			<RiskAssessmentForm />
+			<><RiskAssessmentForm />
+			<Button className="btn dash-btn" onClick={this.switchPage.bind(this, "Home")}>Back to Home</Button></>
 		);
 	}
 
 	render(){
 		let display;
-        if (this.state.display === "Home") {
-            display = this.SearchStudentForms();
+        if (this.state.displayPage === "Home") {
+            display = this.home();
         }
-        if (this.state.display === "Admin") {
-            display = this.CurrentSettings();
+        if (this.state.displayPage === "Admin") {
+            display = this.admin();
         }
-        if (this.state.display === "Form") {
-            display = this.SetLimits();
+        if (this.state.displayPage === "Form") {
+            display = this.form();
         }
 		return(
-			<Row>
+			<>
 				{display}
-			</Row>
+			</>
 		);
 	}
 }

@@ -364,7 +364,7 @@ class AdminPanel extends Component{
                 </Row>
                 <Row>
                     {display}
-                </Row>          
+                </Row>
             </Row>
         );
     }
