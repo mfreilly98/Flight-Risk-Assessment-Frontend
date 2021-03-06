@@ -114,9 +114,9 @@ class AdminPanel extends Component{
             <Row>
                 <h3 className="section">Search for student's submitted forms</h3>
                 <FormGroup as={Row} className="section">
-                    <Form.Label as={Col}>Student's Name: </Form.Label>
-                    <Form.Control as={Col} sm={3} type="text"></Form.Control>
-                    <Button as={Col} className="btn btn-default">Search</Button>
+                    <Form.Label>Student's Name: </Form.Label>
+                    <Form.Control type="text"></Form.Control>
+                    <Button className="btn btn-default">Search</Button>
                 </FormGroup>
             </Row>
         )

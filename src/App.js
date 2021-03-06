@@ -3,15 +3,20 @@ import 'react-datepicker/dist/react-datepicker.css';
 import RiskAssessmentForm from "./components/RiskAssessmentForm";
 import AdminPanel from "./components/AdminPanel";
 import HomePage from "./components/HomePage";
+import {Link, BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {Container} from "react-bootstrap";
 import React from "react";
 
 function App() {
   return (
       <div className="App">
-        <Container fluid>
-          <HomePage />
-        </Container>
+        <Router>
+					<Switch>
+            <Route exact path="/" component={HomePage} />
+						<Route exact path="/AdminPanel" component={AdminPanel} />
+						<Route exact path="/RiskAssessmentForm" component={RiskAssessmentForm} />
+          </Switch>
+				</Router>
       </div>
   );
 }
