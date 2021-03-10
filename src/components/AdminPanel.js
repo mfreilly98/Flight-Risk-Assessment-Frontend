@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './../stylesheets/AdminPanel.css';
-import {Jumbotron, Row, Col, Form, FormGroup, Button} from 'react-bootstrap';
+import {Jumbotron, Row, Col, Form, FormGroup, Button, Container} from 'react-bootstrap';
 
 class AdminPanel extends Component{
     
@@ -119,12 +119,12 @@ class AdminPanel extends Component{
                     <Button className="btn btn-default">Search</Button>
                 </FormGroup>
             </Row>
-        )
+        );
     }
 
     vfrDisplay() {
         return (
-            <>
+            <div>
             <h2>VFR Current Safety Limits</h2>
             <Row>
                 <h3>Local Pattern</h3>
@@ -212,13 +212,13 @@ class AdminPanel extends Component{
                     <p>low: {this.state.vfr.soloFactors.lastLandingComm.low} | med: {this.state.vfr.soloFactors.lastLandingComm.med} | high: {this.state.vfr.soloFactors.lastLandingComm.high}</p>
                 </Row>
             </Row>
-            </>
+            </div>
         )
     }
 
     ifrDisplay() {
         return (
-            <>
+            <div>
             <h2>IFR Current Safety Limits</h2>
             <Row>
                 <h3>Departure</h3>
@@ -286,7 +286,7 @@ class AdminPanel extends Component{
                     <p>low: {this.state.ifr.departure.totalWind.low} | med: {this.state.ifr.departure.totalWind.med} | high: {this.state.ifr.departure.totalWind.high}</p>*/}
                 </Row>
             </Row>
-            </>
+            </div>
         )
     }
 
@@ -331,9 +331,9 @@ class AdminPanel extends Component{
                     <Col><Button className="btn btn-default" onClick={this.set.bind(this, "maxVis", this.state.setMaxVis)}>Set</Button></Col>
                 </Row>
                 <Row>
-                    <Form.Label>Mid safe limit: </Form.Label>
-                    <Form.Control type="number" onChange={e => this.setState({setMidVis: e.target.value})}></Form.Control>
-                    <Button className="btn btn-default" onClick={this.set.bind(this, "midVis", this.state.setMidVis)}>Set</Button>
+                    <Col className="section"><Form.Label>Mid safe limit: </Form.Label></Col>
+                    <Col sm={2}><Form.Control type="number" onChange={e => this.setState({setMidVis: e.target.value})}></Form.Control></Col>
+                    <Col><Button className="btn btn-default" onClick={this.set.bind(this, "midVis", this.state.setMidVis)}>Set</Button></Col>
                 </Row>
             </FormGroup>
         )
@@ -355,16 +355,14 @@ class AdminPanel extends Component{
                 <Row>
                     <Jumbotron fluid className="jumbo">
                         <h1>Admin Panel</h1>
+                        <Button className="btn dash-btn" onClick={this.switchView.bind(this, "student")}>Search Students' Forms</Button>
+                        <Button className="btn dash-btn" onClick={this.switchView.bind(this, "current")}>Current Safety Limits</Button>
+                        <Button className="btn dash-btn" onClick={this.switchView.bind(this, "set")}>Set Safety Limits</Button>
                     </Jumbotron>
                 </Row>
-                <Row>
-                    <Button as={Col} className="btn dash-btn" onClick={this.switchView.bind(this, "student")}>Search Students' Forms</Button>
-                    <Button as={Col} className="btn dash-btn" onClick={this.switchView.bind(this, "current")}>Current Safety Limits</Button>
-                    <Button as={Col} className="btn dash-btn" onClick={this.switchView.bind(this, "set")}>Set Safety Limits</Button>
-                </Row>
-                <Row>
+                <Container>
                     {display}
-                </Row>
+                </Container>
             </Row>
         );
     }

@@ -9,18 +9,18 @@ class HomePage extends Component{
 		return(
 			<Row className="section">
 				<Row>
-						<Jumbotron fluid className="jumbo">
-							<h1>Home Page</h1>
-						</Jumbotron>
-					</Row>
-					<Row>
-						<Link to="/AdminPanel">
-							<Button className="btn dash-btn">Admin</Button>
-						</Link>
-						<Link to="/RiskAssessmentForm">
-							<Button className="btn dash-btn">Form</Button>
-						</Link>
-					</Row>
+					<Jumbotron fluid className="jumbo">
+						<h1>Home Page</h1>
+					</Jumbotron>
+				</Row>
+				<Row>
+					<Link to="/AdminPanel">
+						<Button className="btn dash-btn">Admin</Button>
+					</Link>
+					<Link to="/RiskAssessmentForm">
+						<Button className="btn dash-btn">Form</Button>
+					</Link>
+				</Row>
 			</Row>
 		);
 	}
