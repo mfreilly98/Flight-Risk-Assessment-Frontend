@@ -3,6 +3,7 @@ import FlightDutyFormInput from "./FlightDutyFormInput";
 import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
 import './../stylesheets/RiskAssessmentForm.css';
 import {Button, Row, Col, Form, Jumbotron} from 'react-bootstrap';
+import {Link} from "react-router-dom";
 import DatePicker from 'react-datepicker';
 
 /*
@@ -50,6 +51,7 @@ function RiskAssessmentForm() {
                 <Col>
                     <Jumbotron fluid className="md-12">
                         <h1 className="text-center">Risk Assessment Form</h1>
+                        <Link to="/AdminPanel"><Button>Admin</Button></Link>
                     </Jumbotron>
                 </Col>
             </Row>

@@ -5,3 +5,7 @@
 .departureAirport{
     width: 40%;
 }
+
+.dash{
+    align-items: right;
+}

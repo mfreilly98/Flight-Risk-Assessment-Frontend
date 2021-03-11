@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 import './../stylesheets/AdminPanel.css';
 import {Jumbotron, Row, Col, Form, FormGroup, Button, Container} from 'react-bootstrap';
 
@@ -358,6 +359,7 @@ class AdminPanel extends Component{
                         <Button className="btn dash-btn" onClick={this.switchView.bind(this, "student")}>Search Students' Forms</Button>
                         <Button className="btn dash-btn" onClick={this.switchView.bind(this, "current")}>Current Safety Limits</Button>
                         <Button className="btn dash-btn" onClick={this.switchView.bind(this, "set")}>Set Safety Limits</Button>
+                        <Link to="/"><Button className="btn dash-btn">Back to Form</Button></Link>
                     </Jumbotron>
                 </Row>
                 <Container>

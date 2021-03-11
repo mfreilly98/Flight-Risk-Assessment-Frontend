@@ -1,5 +1,5 @@
 import './../stylesheets/AdminPanel.css';
-import {Link, BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Row, Jumbotron, Button} from "react-bootstrap";
 import React, { Component } from "react";
 
