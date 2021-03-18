@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FlightDutyFormInput from "./FlightDutyFormInput";
 import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
 import './../stylesheets/RiskAssessmentForm.css';
-import {Button, Row, Col, Form, Jumbotron} from 'react-bootstrap';
+import {Button, Row, Col, Form, Jumbotron, Container} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import DatePicker from 'react-datepicker';
 
@@ -46,7 +46,7 @@ function RiskAssessmentForm() {
         console.log("---------------------------------------------")
     }
     return (
-        <>
+        <Container>
             <Row>
                 <Col>
                     <Jumbotron fluid className="jumbo">
@@ -56,58 +56,51 @@ function RiskAssessmentForm() {
                 </Col>
             </Row>
             <Form>
-                <Form.Row>
-                    <Form.Group as={Col} controlId="departureDateAndTime">
-                        <Form.Label className="mr-3">Departure Time and Date: </Form.Label>
-                        <DatePicker
-                            selected={departureTime}
-                            onChange={date => setDepartureTime(date)}
-                            timeInputLabel="Departure Time:"
-                            dateFormat="MM/dd/yyyy h:mm aa"
-                            timeFormat="HH:mm"
-                            showTimeInput
-                            minDate={(new Date())}
-                        />
-                    </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="departureAirport">
-                        <Form.Label>Departure Airport</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="departure_airport"
-                            onChange={e => setDepartureAirport(e.target.value)}
-                            className="departureAirport"
-                        />
-                    </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="studentName">
-                        <Form.Label>Student's Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="student_name"
-                            onChange={e => setStudentName(e.target.value)}
-                            className=" studentInfo"
-                        />
-                    </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="studentLevel">
-                        <Form.Label>Certificate pursuing</Form.Label> {/*There is probably a better way to phrase this*/}
-                        <Form.Control as="select" name="student_level" onChange={e => setStudentLevel(e.target.value)} value={studentLevel}>
-                            <option value="private">Private Pilot's License</option>
-                            <option value="instrument">Instrument Rating</option>
-                            <option value="commercial">Commercial License</option>
-                            <option value="cfi">Certified Flight Instructor</option>
-                            <option value="multi">Commercial Multi Engine Add-on</option>
-                            <option value="other">Other</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form.Row>
+                <Form.Group as={Row} controlId="departureDateAndTime">
+                    <Form.Label column md="4" className="align-right">Departure Time and Date: </Form.Label>
+                    <DatePicker
+                        selected={departureTime}
+                        onChange={date => setDepartureTime(date)}
+                        timeInputLabel="Departure Time:"
+                        dateFormat="MM/dd/yyyy h:mm aa"
+                        timeFormat="HH:mm"
+                        showTimeInput
+                        minDate={(new Date())}
+                        column md="8"
+                        className="float-left w-100"
+                    />
+                </Form.Group>
+                <Form.Group as={Row} controlId="departureAirport">
+                    <Form.Label column md="4" className="float-right">Departure Airport: </Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="departure_airport"
+                        onChange={e => setDepartureAirport(e.target.value)}
+                        className="departureAirport"
+                        colum md="8"
+                    />
+                </Form.Group>
+                <Form.Group as={Row} controlId="studentName">
+                    <Form.Label column md="4" className="float-right">Student's Name: </Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="student_name"
+                        onChange={e => setStudentName(e.target.value)}
+                        className=" studentInfo float-left"
+                        column md="8"
+                    />
+                </Form.Group>
+                <Form.Group as={Row} controlId="studentLevel">
+                    <Form.Label column md="4">Certificate pursuing: </Form.Label> {/*There is probably a better way to phrase this*/}
+                    <Form.Control as="select" column md="8" className="studentInfo" name="student_level" onChange={e => setStudentLevel(e.target.value)} value={studentLevel}>
+                        <option value="private">Private Pilot's License</option>
+                        <option value="instrument">Instrument Rating</option>
+                        <option value="commercial">Commercial License</option>
+                        <option value="cfi">Certified Flight Instructor</option>
+                        <option value="multi">Commercial Multi Engine Add-on</option>
+                        <option value="other">Other</option>
+                    </Form.Control>
+                </Form.Group>
 
                 <Form.Row>
                     <Form.Group id="dualFlight" as={Col}>
@@ -120,7 +113,7 @@ function RiskAssessmentForm() {
                 </Form.Row>
 
 
-
+                {/*TODO: Finish formatting*/}
                 <Form.Row>
                     <Form.Group as={Col} controlId="previousFlights">
                         <Form.Label>Previous Flights that day</Form.Label>
@@ -168,7 +161,7 @@ function RiskAssessmentForm() {
                 </Button>
             </Form>
 
-        </>
+        </Container>
     );
 }
 
