@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import './../stylesheets/AdminPanel.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {Jumbotron, Row, Col, Form, FormGroup, Button, Container} from 'react-bootstrap';
 
 class AdminPanel extends Component{
@@ -112,14 +113,16 @@ class AdminPanel extends Component{
 
     SearchStudentForms() {
         return (
-            <Row>
+            <Form inline className="section">
+            <Form.Row>
                 <h3 className="section">Search for student's submitted forms</h3>
                 <FormGroup as={Row} className="section">
                     <Form.Label>Student's Name: </Form.Label>
                     <Form.Control type="text"></Form.Control>
                     <Button className="btn btn-default">Search</Button>
                 </FormGroup>
-            </Row>
+            </Form.Row>
+            </Form>
         );
     }
 
@@ -312,31 +315,39 @@ class AdminPanel extends Component{
 
     SetLimits() {
 	    return (
-            <FormGroup as={Col} className="section">
+            <Form inline className="section">
                 <h3>Set safety limilts</h3>
                 <h5>Cross Winds (knots)</h5>
-                <Row>
-                    <Col><Form.Label>Max safe limit: </Form.Label></Col>
-                    <Col sm={2}><Form.Control type="number" onChange={e => this.setState({setMaxCross: e.target.value})}></Form.Control></Col>
-                    <Col><Button className="btn btn-default" onClick={this.set.bind(this, "maxCross", this.state.setMaxCross)}>Set</Button></Col>
-                </Row>
-                <Row>
-                    <Col><Form.Label>Mid safe limit: </Form.Label></Col>
-                    <Col sm={2}><Form.Control type="number" onChange={e => this.setState({setMidCross: e.target.value})}></Form.Control></Col>
-                    <Col><Button className="btn btn-default" onClick={this.set.bind(this, "midCross", this.state.setMidCross)}>Set</Button></Col>
-                </Row>
+                <Form.Row>
+                    <FormGroup>
+                        <Form.Label>Max safe limit: </Form.Label>
+                        <Form.Control type="number" onChange={e => this.setState({setMaxCross: e.target.value})}></Form.Control>
+                        <Button className="btn btn-default" onClick={this.set.bind(this, "maxCross", this.state.setMaxCross)}>Set</Button>
+                    </FormGroup>
+                </Form.Row>
+                <Form.Row>
+                    <FormGroup>
+                        <Form.Label>Mid safe limit: </Form.Label>
+                        <Form.Control type="number" onChange={e => this.setState({setMidCross: e.target.value})}></Form.Control>
+                        <Button className="btn btn-default" onClick={this.set.bind(this, "midCross", this.state.setMidCross)}>Set</Button>
+                    </FormGroup>
+                </Form.Row>
                 <h5>Visibility (statue miles)</h5>
-                <Row>
-                    <Col className="section"><Form.Label>Max safe limit: </Form.Label></Col>
-                    <Col sm={2}><Form.Control type="number" onChange={e => this.setState({setMaxVis: e.target.value})}></Form.Control></Col>
-                    <Col><Button className="btn btn-default" onClick={this.set.bind(this, "maxVis", this.state.setMaxVis)}>Set</Button></Col>
-                </Row>
-                <Row>
-                    <Col className="section"><Form.Label>Mid safe limit: </Form.Label></Col>
-                    <Col sm={2}><Form.Control type="number" onChange={e => this.setState({setMidVis: e.target.value})}></Form.Control></Col>
-                    <Col><Button className="btn btn-default" onClick={this.set.bind(this, "midVis", this.state.setMidVis)}>Set</Button></Col>
-                </Row>
-            </FormGroup>
+                <Form.Row>
+                    <FormGroup>
+                        <Form.Label>Max safe limit: </Form.Label>
+                        <Form.Control type="number" onChange={e => this.setState({setMaxVis: e.target.value})}></Form.Control>
+                        <Button className="btn btn-default" onClick={this.set.bind(this, "maxVis", this.state.setMaxVis)}>Set</Button>
+                    </FormGroup>
+                </Form.Row>
+                <Form.Row>
+                    <FormGroup>
+                        <Form.Label>Mid safe limit: </Form.Label>
+                        <Form.Control type="number" onChange={e => this.setState({setMidVis: e.target.value})}></Form.Control>
+                        <Button className="btn btn-default" onClick={this.set.bind(this, "midVis", this.state.setMidVis)}>Set</Button>
+                    </FormGroup>
+                </Form.Row>
+            </Form>
         )
     }
 
@@ -352,20 +363,16 @@ class AdminPanel extends Component{
             display = this.SetLimits();
         }
         return (
-            <Row>
-                <Row>
-                    <Jumbotron fluid className="jumbo">
-                        <h1>Admin Panel</h1>
-                        <Button className="btn dash-btn" onClick={this.switchView.bind(this, "student")}>Search Students' Forms</Button>
-                        <Button className="btn dash-btn" onClick={this.switchView.bind(this, "current")}>Current Safety Limits</Button>
-                        <Button className="btn dash-btn" onClick={this.switchView.bind(this, "set")}>Set Safety Limits</Button>
-                        <Link to="/"><Button className="btn dash-btn">Back to Form</Button></Link>
-                    </Jumbotron>
-                </Row>
-                <Container>
-                    {display}
-                </Container>
-            </Row>
+            <div>
+                <Jumbotron fluid className="jumbo">
+                    <h1>Admin Panel</h1>
+                    <Button className="btn dash-btn" onClick={this.switchView.bind(this, "student")}>Search Students' Forms</Button>
+                    <Button className="btn dash-btn" onClick={this.switchView.bind(this, "current")}>Current Safety Limits</Button>
+                    <Button className="btn dash-btn" onClick={this.switchView.bind(this, "set")}>Set Safety Limits</Button>
+                    <Link to="/"><Button className="btn dash-btn">Form</Button></Link>
+                </Jumbotron>
+                {display}
+            </div>
         );
     }
 }

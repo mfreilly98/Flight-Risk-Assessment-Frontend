@@ -49,9 +49,9 @@ function RiskAssessmentForm() {
         <>
             <Row>
                 <Col>
-                    <Jumbotron fluid className="md-12">
+                    <Jumbotron fluid className="jumbo">
+                        <Link to="/AdminPanel" ><Button style={{ float: "right" }}>Admin</Button></Link>
                         <h1 className="text-center">Risk Assessment Form</h1>
-                        <Link to="/AdminPanel"><Button>Admin</Button></Link>
                     </Jumbotron>
                 </Col>
             </Row>

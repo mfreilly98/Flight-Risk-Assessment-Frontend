@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import RiskAssessmentForm from "./components/RiskAssessmentForm";
 import AdminPanel from "./components/AdminPanel";
-import HomePage from "./components/HomePage";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import React from "react";
 
