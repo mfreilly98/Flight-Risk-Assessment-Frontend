@@ -86,7 +86,7 @@ function RiskAssessmentForm() {
                         type="text"
                         name="student_name"
                         onChange={e => setStudentName(e.target.value)}
-                        className=" studentInfo float-left"
+                        className="studentInfo"
                         column md="8"
                     />
                 </Form.Group>
@@ -103,6 +103,7 @@ function RiskAssessmentForm() {
                 </Form.Group>
 
                 <Form.Row>
+
                     <Form.Group id="dualFlight" as={Col}>
                         <Form.Check
                             type="checkbox" label="This is a dual flight"
@@ -110,21 +111,21 @@ function RiskAssessmentForm() {
                             value={isDualFlight}
                         />
                     </Form.Group>
+
                 </Form.Row>
 
 
-                {/*TODO: Finish formatting*/}
-                <Form.Row>
-                    <Form.Group as={Col} controlId="previousFlights">
-                        <Form.Label>Previous Flights that day</Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="prevFlights"
-                            onChange={e => setPrevFlights(e.target.value)}
-                            value={prevFlights}
-                        />
-                    </Form.Group>
-                </Form.Row>
+                <Form.Group as={Row} controlId="previousFlights">
+                    <Form.Label column md="4">Previous Flights that day</Form.Label>
+                    <Form.Control
+                        type="number"
+                        name="prevFlights"
+                        onChange={e => setPrevFlights(e.target.value)}
+                        value={prevFlights}
+                        className="studentInfo"
+                        column md="8"
+                    />
+                </Form.Group>
 
                 {/*Should only display if prevFlight > 0*/}
                 <FlightDutyFormInput
@@ -133,16 +134,14 @@ function RiskAssessmentForm() {
                     eventHandler={setFlightDuty}
                 />
 
-                <Form.Row>
-                    <Form.Group as={Col} controlId="catOfFlight">
-                        <Form.Label>Category of Syllabus Flight</Form.Label>
-                        <Form.Control as="select" name="student_level" onChange={e => setCategoryOfFlight(e.target.value)} value={categoryOfFlight}>
-                            <option value="normal">Normal</option>
-                            <option value="stage_check">Stage Check</option>
-                            <option value="checkride">FAA Practical Test</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form.Row>
+                <Form.Group as={Row} controlId="catOfFlight">
+                    <Form.Label column md="4">Category of Syllabus Flight</Form.Label>
+                    <Form.Control as="select" column md="8" className="studentInfo" name="student_level" onChange={e => setCategoryOfFlight(e.target.value)} value={categoryOfFlight}>
+                        <option value="normal">Normal</option>
+                        <option value="stage_check">Stage Check</option>
+                        <option value="checkride">FAA Practical Test</option>
+                    </Form.Control>
+                </Form.Group>
 
                 {/*Should only display if categoryOfFlight is 'normal'*/}
                 <TypeOfFlightFormInput
