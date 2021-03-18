@@ -5,3 +5,15 @@
 .departureAirport{
     width: 40%;
 }
+
+.dash{
+    align-items: right;
+}
+
+.jumbo {
+	align-content: center;
+	align-items: center;
+	text-align: center;
+	color:#FFF;
+	background-color: #000000;
+}
