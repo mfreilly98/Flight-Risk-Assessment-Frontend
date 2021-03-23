@@ -5,10 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Jumbotron, Row, Col, Form, FormGroup, Button, Container} from 'react-bootstrap';
 
 class AdminPanel extends Component{
-    
+
     constructor(props) {
         super(props);
-
         this.state = ({ ifr: {
                             departure: {
                                 ceilingDay: {low: 1000, med: 800, high: 600},
@@ -94,13 +93,13 @@ class AdminPanel extends Component{
                         },
                         page: "student",
                         current: "IFR"});
-        
+
         this.set = this.set.bind(this);
         this.switchView = this.switchView.bind(this);
     }
 
     set(toSet, value) {
-        
+
     }
 
     switchView(panel){

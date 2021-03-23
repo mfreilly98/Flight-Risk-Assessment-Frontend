@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import FlightDutyFormInput from "./FlightDutyFormInput";
-import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
-import './../stylesheets/RiskAssessmentForm.css';
 import {Button, Row, Col, Form, Jumbotron, Container} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
+
+import FlightDutyFormInput from "./FlightDutyFormInput";
+import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
+import './../stylesheets/RiskAssessmentForm.css';
+import './../stylesheets/AdminPanel.css';
 
 /*
  * This will handle the User input for the risk assessment form.
  */
 function RiskAssessmentForm() {
     /* Departure time and date. Format is MM/dd/yyyy h:mm aa*/
-    const [departureTime, setDepartureTime] = useState(new Date());
+    const [departureTime, setDepartureTime] = useState();
     const [departureAirport, setDepartureAirport] = useState();
     const [studentName, setStudentName] = useState("");
     /*What license the student is pursing. This will indicate their skill level.*/
@@ -21,14 +24,26 @@ function RiskAssessmentForm() {
     /*How Many flights have they flown previously that day*/
     const [prevFlights, setPrevFlights] = useState(0);
     /*When was their first flight today.*/
-    const [flightDuty, setFlightDuty] = useState(new Date());
+    const [flightDuty, setFlightDuty] = useState();
     /*What is the category of flight: Normal, Stage Check, FAA checkride*/
     const [categoryOfFlight, setCategoryOfFlight] = useState("normal");
     /*Where are they going? Staying local or going on a cross country*/
-    const [typeOfFlight, setTypeOfFlight] = useState("local_flight");
+    const [typeOfFlight, setTypeOfFlight] = useState("pattern");
     /*If they are going on a cross country, to what airports*/
     const [xcDestination, setXcDestination] = useState("");
 
+
+    async function handleClick(){
+
+        //axios.get('/getMetar?airportID=KCBF').then(response=>{console.log(response)});
+        axios({
+            method: 'post',
+            url: "/basicFormInfo",
+            data: {departureTime,departureAirport,studentName,studentLevel,isDualFlight,prevFlights,flightDuty,categoryOfFlight,typeOfFlight,xcDestination}
+        }).then(response => {
+            console.log(response.data);
+        })
+    }
     /*Simple logging function. For debugging purposes only.*/
     function logState(e) {
         /* Remember that setState() is async so console.log my lag behind the state change*/
@@ -107,7 +122,7 @@ function RiskAssessmentForm() {
                     <Form.Group id="dualFlight" as={Col}>
                         <Form.Check
                             type="checkbox" label="This is a dual flight"
-                            onChange={e => setIsDualFlight(e.target.value === "on")}
+                            onChange={() => {setIsDualFlight(!isDualFlight)}}
                             value={isDualFlight}
                         />
                     </Form.Group>
@@ -153,10 +168,8 @@ function RiskAssessmentForm() {
                 />
 
 
-
-                {/*TODO: Have button submit the form.*/}
-                <Button variant="primary" onClick={logState}>
-                    Submit
+                <Button  className="dash-btn" onClick={handleClick}>
+                    Next
                 </Button>
             </Form>
 
