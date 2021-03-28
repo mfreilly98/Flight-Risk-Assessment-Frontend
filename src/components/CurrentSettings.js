@@ -283,7 +283,6 @@ vfrDisplay() {
                     <Link to="/AdminPanel/SearchStudent"><Button className="btn dash-btn">Search Students' Forms</Button></Link>
                     <Link to="/AdminPanel/CurrentSettings"><Button className="btn dash-btn">Current Safety Limits</Button></Link>
                     <Link to="/AdminPanel/SetLimits"><Button className="btn dash-btn">Set Safety Limits</Button></Link>
-                    <Link to="/"><Button className="btn dash-btn">Form</Button></Link>
                 </Jumbotron>
                 <Row className="section">
                     <Row>

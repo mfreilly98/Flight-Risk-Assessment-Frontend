@@ -47,14 +47,10 @@ function RiskAssessmentForm() {
     }
     return (
         <>
-            <Row>
-                <Col>
-                    <Jumbotron fluid className="jumbo">
-                        <Link to="/AdminPanel/SearchStudent" ><Button style={{ float: "right" }}>Admin</Button></Link>
-                        <h1 className="text-center">Risk Assessment Form</h1>
-                    </Jumbotron>
-                </Col>
-            </Row>
+            <Link to="/AdminPanel/SearchStudent" ><Button style={{ float: "right" }} className="btn dash-btn">Admin</Button></Link>
+            <Jumbotron fluid className="jumbo">
+                <h1 className="text-center">Risk Assessment Form</h1>
+            </Jumbotron>
             <Form>
                 <Form.Row>
                     <Form.Group as={Col} controlId="departureDateAndTime">
