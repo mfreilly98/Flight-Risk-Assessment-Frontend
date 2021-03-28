@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import './../stylesheets/AdminPanel.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Jumbotron, Row, Col, Form, FormGroup, Button, Container} from 'react-bootstrap';
+import {Jumbotron, Row, Col, Form, FormGroup, Button} from 'react-bootstrap';
 
-class AdminPanel extends Component{
+class CurrentSettings extends Component{
     
     constructor(props) {
         super(props);
@@ -91,42 +91,16 @@ class AdminPanel extends Component{
                                 lastLandingPriv: {low: 4, med: 9, high: 14},
                                 lastLandingComm: {low: 14, med: 28, high: 45},
                             }
-                        },
-                        page: "student",
-                        current: "IFR"});
-        
-        this.set = this.set.bind(this);
-        this.switchView = this.switchView.bind(this);
+                        }, 
+                        current: "IFR"
+                    });
     }
 
-    set(toSet, value) {
-        
-    }
+switchCurrent(panel){
+    this.setState({current: panel});
+}
 
-    switchView(panel){
-        this.setState({page: panel});
-    }
-
-    switchCurrent(panel){
-        this.setState({current: panel});
-    }
-
-    SearchStudentForms() {
-        return (
-            <Form inline className="section">
-            <Form.Row>
-                <h3 className="section">Search for student's submitted forms</h3>
-                <FormGroup as={Row} className="section">
-                    <Form.Label>Student's Name: </Form.Label>
-                    <Form.Control type="text"></Form.Control>
-                    <Button className="btn btn-default">Search</Button>
-                </FormGroup>
-            </Form.Row>
-            </Form>
-        );
-    }
-
-    vfrDisplay() {
+vfrDisplay() {
         return (
             <div>
             <h2>VFR Current Safety Limits</h2>
@@ -294,7 +268,7 @@ class AdminPanel extends Component{
         )
     }
 
-    CurrentSettings() {
+    render() {
         let display;
         if (this.state.current === "IFR"){
             display = this.ifrDisplay();
@@ -303,78 +277,25 @@ class AdminPanel extends Component{
             display = this.vfrDisplay();
         }
         return (
-            <Row className="section">
-                <Row>
-                    <Button as={Col} className="btn dash-btn" onClick={this.switchCurrent.bind(this, "IFR")}>IFR Safety Limits</Button>
-                    <Button as={Col} className="btn dash-btn" onClick={this.switchCurrent.bind(this, "VFR")}>VFR Safety Limits</Button>
-                </Row>
-                {display}
-            </Row>
-        )
-    }
-
-    SetLimits() {
-	    return (
-            <Form inline className="section">
-                <h3>Set safety limilts</h3>
-                <h5>Cross Winds (knots)</h5>
-                <Form.Row>
-                    <FormGroup>
-                        <Form.Label>Max safe limit: </Form.Label>
-                        <Form.Control type="number" onChange={e => this.setState({setMaxCross: e.target.value})}></Form.Control>
-                        <Button className="btn btn-default" onClick={this.set.bind(this, "maxCross", this.state.setMaxCross)}>Set</Button>
-                    </FormGroup>
-                </Form.Row>
-                <Form.Row>
-                    <FormGroup>
-                        <Form.Label>Mid safe limit: </Form.Label>
-                        <Form.Control type="number" onChange={e => this.setState({setMidCross: e.target.value})}></Form.Control>
-                        <Button className="btn btn-default" onClick={this.set.bind(this, "midCross", this.state.setMidCross)}>Set</Button>
-                    </FormGroup>
-                </Form.Row>
-                <h5>Visibility (statue miles)</h5>
-                <Form.Row>
-                    <FormGroup>
-                        <Form.Label>Max safe limit: </Form.Label>
-                        <Form.Control type="number" onChange={e => this.setState({setMaxVis: e.target.value})}></Form.Control>
-                        <Button className="btn btn-default" onClick={this.set.bind(this, "maxVis", this.state.setMaxVis)}>Set</Button>
-                    </FormGroup>
-                </Form.Row>
-                <Form.Row>
-                    <FormGroup>
-                        <Form.Label>Mid safe limit: </Form.Label>
-                        <Form.Control type="number" onChange={e => this.setState({setMidVis: e.target.value})}></Form.Control>
-                        <Button className="btn btn-default" onClick={this.set.bind(this, "midVis", this.state.setMidVis)}>Set</Button>
-                    </FormGroup>
-                </Form.Row>
-            </Form>
-        )
-    }
-
-    render() {
-        let display;
-        if (this.state.page === "student") {
-            display = this.SearchStudentForms();
-        }
-        if (this.state.page === "current") {
-            display = this.CurrentSettings();
-        }
-        if (this.state.page === "set") {
-            display = this.SetLimits();
-        }
-        return (
             <div>
                 <Jumbotron fluid className="jumbo">
                     <h1>Admin Panel</h1>
-                    <Button className="btn dash-btn" onClick={this.switchView.bind(this, "student")}>Search Students' Forms</Button>
-                    <Button className="btn dash-btn" onClick={this.switchView.bind(this, "current")}>Current Safety Limits</Button>
-                    <Button className="btn dash-btn" onClick={this.switchView.bind(this, "set")}>Set Safety Limits</Button>
+                    <Link to="/AdminPanel/SearchStudent"><Button className="btn dash-btn">Search Students' Forms</Button></Link>
+                    <Link to="/AdminPanel/CurrentSettings"><Button className="btn dash-btn">Current Safety Limits</Button></Link>
+                    <Link to="/AdminPanel/SetLimits"><Button className="btn dash-btn">Set Safety Limits</Button></Link>
                     <Link to="/"><Button className="btn dash-btn">Form</Button></Link>
                 </Jumbotron>
-                {display}
+                <Row className="section">
+                    <Row>
+                        <Button as={Col} className="btn dash-btn" onClick={this.switchCurrent.bind(this, "IFR")}>IFR Safety Limits</Button>
+                        <Button as={Col} className="btn dash-btn" onClick={this.switchCurrent.bind(this, "VFR")}>VFR Safety Limits</Button>
+                    </Row>
+                    {display}
+                </Row>
             </div>
-        );
+        )
     }
+
 }
 
-export default AdminPanel;
+export default CurrentSettings;
