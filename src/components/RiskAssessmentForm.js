@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import {Button, Row, Col, Form, Jumbotron, Container} from 'react-bootstrap';
+import {Link} from "react-router-dom";
+import DatePicker from 'react-datepicker';
+import axios from 'axios';
+import moment from 'moment';
+
 import FlightDutyFormInput from "./FlightDutyFormInput";
 import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
 import './../stylesheets/RiskAssessmentForm.css';
-import {Button, Row, Col, Form, Jumbotron} from 'react-bootstrap';
-import {Link} from "react-router-dom";
-import DatePicker from 'react-datepicker';
+import './../stylesheets/AdminPanel.css';
+import DynamicFormInput from "./DynamicFormInput";
 
 /*
  * This will handle the User input for the risk assessment form.
@@ -21,14 +26,37 @@ function RiskAssessmentForm() {
     /*How Many flights have they flown previously that day*/
     const [prevFlights, setPrevFlights] = useState(0);
     /*When was their first flight today.*/
-    const [flightDuty, setFlightDuty] = useState(new Date());
+    const [flightDuty, setFlightDuty] = useState();
     /*What is the category of flight: Normal, Stage Check, FAA checkride*/
     const [categoryOfFlight, setCategoryOfFlight] = useState("normal");
     /*Where are they going? Staying local or going on a cross country*/
-    const [typeOfFlight, setTypeOfFlight] = useState("local_flight");
+    const [typeOfFlight, setTypeOfFlight] = useState("pattern");
     /*If they are going on a cross country, to what airports*/
     const [xcDestination, setXcDestination] = useState("");
 
+    const [showDynamicQuestions, setShowDynamicQuestions] = useState(false);
+
+    const [currentWeather, setCurrentWeather] = useState();
+
+
+    async function handleClick(){
+
+        const formattedDepartureDate = moment(departureTime).format("MM/DD/yyyy HH:mm").toString();
+        console.log("Time: "+formattedDepartureDate);
+        axios({
+            method: 'post',
+            url: "/basicFormInfo",
+            data: {'departureTime':departureTime,departureAirport,studentName,studentLevel,isDualFlight,prevFlights,flightDuty,categoryOfFlight,typeOfFlight,xcDestination}
+        }).then(response => {
+            console.log(response);
+            setCurrentWeather(response);
+            setShowDynamicQuestions(true);
+        })
+    }
+
+    /*function setTime(date){
+        Moment
+    }*/
     /*Simple logging function. For debugging purposes only.*/
     function logState(e) {
         /* Remember that setState() is async so console.log my lag behind the state change*/
@@ -45,20 +73,22 @@ function RiskAssessmentForm() {
         console.log("Type of Flight: "+typeOfFlight);
         console.log("---------------------------------------------")
     }
-    return (
-        <>
-            <Row>
-                <Col>
-                    <Jumbotron fluid className="jumbo">
-                        <Link to="/AdminPanel" ><Button style={{ float: "right" }}>Admin</Button></Link>
-                        <h1 className="text-center">Risk Assessment Form</h1>
-                    </Jumbotron>
-                </Col>
-            </Row>
-            <Form>
-                <Form.Row>
-                    <Form.Group as={Col} controlId="departureDateAndTime">
-                        <Form.Label className="mr-3">Departure Time and Date: </Form.Label>
+
+    if( !showDynamicQuestions)
+    {
+        return (
+            <Container>
+                <Row>
+                    <Col>
+                        <Jumbotron fluid className="jumbo">
+                            <Link to="/AdminPanel"><Button style={{float: "right"}}>Admin</Button></Link>
+                            <h1 className="text-center">Risk Assessment Form</h1>
+                        </Jumbotron>
+                    </Col>
+                </Row>
+                <Form>
+                    <Form.Group as={Row} controlId="departureDateAndTime">
+                        <Form.Label column md="4" className="align-right">Departure Time and Date: </Form.Label>
                         <DatePicker
                             selected={departureTime}
                             onChange={date => setDepartureTime(date)}
@@ -67,38 +97,35 @@ function RiskAssessmentForm() {
                             timeFormat="HH:mm"
                             showTimeInput
                             minDate={(new Date())}
+                            column md="8"
+                            className="float-left w-100"
                         />
                     </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="departureAirport">
-                        <Form.Label>Departure Airport</Form.Label>
+                    <Form.Group as={Row} controlId="departureAirport">
+                        <Form.Label column md="4" className="float-right">Departure Airport: </Form.Label>
                         <Form.Control
                             type="text"
                             name="departure_airport"
                             onChange={e => setDepartureAirport(e.target.value)}
                             className="departureAirport"
+                            colum md="8"
                         />
                     </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="studentName">
-                        <Form.Label>Student's Name</Form.Label>
+                    <Form.Group as={Row} controlId="studentName">
+                        <Form.Label column md="4" className="float-right">Student's Name: </Form.Label>
                         <Form.Control
                             type="text"
                             name="student_name"
                             onChange={e => setStudentName(e.target.value)}
-                            className=" studentInfo"
+                            className="studentInfo"
+                            column md="8"
                         />
                     </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="studentLevel">
-                        <Form.Label>Certificate pursuing</Form.Label> {/*There is probably a better way to phrase this*/}
-                        <Form.Control as="select" name="student_level" onChange={e => setStudentLevel(e.target.value)} value={studentLevel}>
+                    <Form.Group as={Row} controlId="studentLevel">
+                        <Form.Label column md="4">Certificate
+                            pursuing: </Form.Label> {/*There is probably a better way to phrase this*/}
+                        <Form.Control as="select" column md="8" className="studentInfo" name="student_level"
+                                      onChange={e => setStudentLevel(e.target.value)} value={studentLevel}>
                             <option value="private">Private Pilot's License</option>
                             <option value="instrument">Instrument Rating</option>
                             <option value="commercial">Commercial License</option>
@@ -107,69 +134,76 @@ function RiskAssessmentForm() {
                             <option value="other">Other</option>
                         </Form.Control>
                     </Form.Group>
-                </Form.Row>
 
-                <Form.Row>
-                    <Form.Group id="dualFlight" as={Col}>
-                        <Form.Check
-                            type="checkbox" label="This is a dual flight"
-                            onChange={e => setIsDualFlight(e.target.value === "on")}
-                            value={isDualFlight}
-                        />
-                    </Form.Group>
-                </Form.Row>
+                    <Form.Row>
+
+                        <Form.Group id="dualFlight" as={Col}>
+                            <Form.Check
+                                type="checkbox" label="This is a dual flight"
+                                onChange={() => {
+                                    setIsDualFlight(!isDualFlight)
+                                }}
+                                value={isDualFlight}
+                            />
+                        </Form.Group>
+
+                    </Form.Row>
 
 
-
-                <Form.Row>
-                    <Form.Group as={Col} controlId="previousFlights">
-                        <Form.Label>Previous Flights that day</Form.Label>
+                    <Form.Group as={Row} controlId="previousFlights">
+                        <Form.Label column md="4">Previous Flights that day</Form.Label>
                         <Form.Control
                             type="number"
                             name="prevFlights"
                             onChange={e => setPrevFlights(e.target.value)}
                             value={prevFlights}
+                            className="studentInfo"
+                            column md="8"
                         />
                     </Form.Group>
-                </Form.Row>
 
-                {/*Should only display if prevFlight > 0*/}
-                <FlightDutyFormInput
-                    prevFlights={prevFlights}
-                    flightDuty={flightDuty}
-                    eventHandler={setFlightDuty}
-                />
+                    {/*Should only display if prevFlight > 0*/}
+                    <FlightDutyFormInput
+                        prevFlights={prevFlights}
+                        flightDuty={flightDuty}
+                        eventHandler={setFlightDuty}
+                    />
 
-                <Form.Row>
-                    <Form.Group as={Col} controlId="catOfFlight">
-                        <Form.Label>Category of Syllabus Flight</Form.Label>
-                        <Form.Control as="select" name="student_level" onChange={e => setCategoryOfFlight(e.target.value)} value={categoryOfFlight}>
+                    <Form.Group as={Row} controlId="catOfFlight">
+                        <Form.Label column md="4">Category of Syllabus Flight</Form.Label>
+                        <Form.Control as="select" column md="8" className="studentInfo" name="student_level"
+                                      onChange={e => setCategoryOfFlight(e.target.value)} value={categoryOfFlight}>
                             <option value="normal">Normal</option>
                             <option value="stage_check">Stage Check</option>
                             <option value="checkride">FAA Practical Test</option>
                         </Form.Control>
                     </Form.Group>
-                </Form.Row>
 
-                {/*Should only display if categoryOfFlight is 'normal'*/}
-                <TypeOfFlightFormInput
-                    categoryOfFlight={categoryOfFlight}
-                    typeOfFlight={typeOfFlight}
-                    eventHandler={setTypeOfFlight}
-                    xcDestination={xcDestination}
-                    setXcDestination={setXcDestination}
-                />
-
+                    {/*Should only display if categoryOfFlight is 'normal'*/}
+                    <TypeOfFlightFormInput
+                        categoryOfFlight={categoryOfFlight}
+                        typeOfFlight={typeOfFlight}
+                        eventHandler={setTypeOfFlight}
+                        xcDestination={xcDestination}
+                        setXcDestination={setXcDestination}
+                    />
 
 
-                {/*TODO: Have button submit the form.*/}
-                <Button variant="primary" onClick={logState}>
-                    Submit
-                </Button>
-            </Form>
+                    <Button className="dash-btn">
+                        <Link to={'DynamicQuestions'} className="dash-btn" onClick={handleClick}>
+                            Next
+                        </Link>
+                    </Button>
+                    <Button className="dash-btn" onClick={logState}>
+                        Log State
+                    </Button>
+                </Form>
 
-        </>
-    );
+            </Container>
+        );
+    }
+    else
+        return (<DynamicFormInput currentWeather={currentWeather} />)
 }
 
 
