@@ -269,7 +269,7 @@ vfrDisplay() {
     }
 
     render() {
-        let display;
+        let display
         if (this.state.current === "IFR"){
             display = this.ifrDisplay();
         }
