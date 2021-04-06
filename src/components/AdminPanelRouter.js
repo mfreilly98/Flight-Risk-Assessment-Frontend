@@ -7,6 +7,7 @@ import {Jumbotron, Button} from 'react-bootstrap';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import React from "react";
 
+// This component acts as a router for all of the admin panel pages.
 function AdminPanelRouter() {
   return (
     <div>

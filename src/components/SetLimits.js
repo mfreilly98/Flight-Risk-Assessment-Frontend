@@ -4,29 +4,33 @@ import './../stylesheets/AdminPanel.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Jumbotron, Row, Form, FormGroup, Button} from 'react-bootstrap';
 
+// This component allows admins to set the safety limits for the application.
 class SetLimits extends Component {
 
 constructor(props){
   super(props)
 
   this.state = ({settings: "IFR"},
-                {type: "departure"})
+                {type: "Departure"})
 }
 
+// This function takes in a string and switches the subcategory that is being displayed.
 switch(panel){
   this.setState({type: panel})
 }
 
+// This function takes in a string and switches the category that is being displayed and sets the subcategory to its default.
 switchCurrent(panel){
     this.setState({settings: panel})
     if (panel === "IFR"){
-      this.setState({type: "departure"})
+      this.setState({type: "Departure"})
     }
     else {
-      this.setState({type: "localPattern"}) 
+      this.setState({type: "LocalPattern"}) 
     }
 }
 
+// This function takes in a list of strings and maps them to a form that can set lows, mids, and highs for a given parameter then returns that form.
 form(items){
   let itemList=[]
   items.forEach((item)=>{
@@ -64,68 +68,73 @@ form(items){
   )
 }
 
+// This function returns the form to set the limits for ifr.
 ifr(){
   let type
-  if (this.state.type === "departure"){
+  if (this.state.type === "Departure"){
     type = this.form(['ceilingDay','ceilingNight','visibility','totalWind','gustIncr','crosswind'])
   }
-  else if (this.state.type === "enroute"){
+  else if (this.state.type === "Enroute"){
     type = this.form(['ceilingDay','ceilingNight','visibility','time','thunderstorm','fuelAlt','altAirfield'])
   }
-  else if (this.state.type === "destination"){
+  else if (this.state.type === "Destination"){
     type = this.form(['ceilingDay','ceilingNight','visibility','totalWind','gustIncr','crosswind'])
   }
-  else if (this.state.type === "physiology"){
+  else if (this.state.type === "Physiology"){
     type = this.form(['flightTime','flightBegan','prevFlights','outsideTemp'])
   }
   return(
     <div>
       <Row>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "departure")}>departure</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "enroute")}>enroute</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "destination")}>destination</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "physiology")}>physiology</Button>
-        </Row>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Departure")}>departure</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Enroute")}>enroute</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Destination")}>destination</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Physiology")}>physiology</Button>
+      </Row>
+      <h1>{this.state.type}</h1>
       {type}
     </div>
   )
 }
 
+// This function returns the form to set the limits for vfr.
 vfr(){
   let type
-  if (this.state.type === "localPattern"){
+  if (this.state.type === "LocalPattern"){
     type = this.form(['ceilingDayDual','ceilingDaySolo','ceilingNight','visibilityDay','visibilityNight','totalWind','gustIncr','crosswind'])
   }
-  else if (this.state.type === "departure"){
+  else if (this.state.type === "Departure"){
     type = this.form(['ceiling','visibility','totalWind','gustIncr','crosswind'])
   }
-  else if (this.state.type === "enroute"){
+  else if (this.state.type === "Enroute"){
     type = this.form(['ceiling','visibility','time','fuelAlt'])
   }
-  else if (this.state.type === "destination"){
+  else if (this.state.type === "Destination"){
     type = this.form(['ceiling','visibility','totalWind','gustIncr','crosswind'])
   }
-  else if (this.state.type === "physiology"){
+  else if (this.state.type === "Physiology"){
     type = this.form(['flightTime','flightBegan','prevFlights','outsideTemp'])
   }
-  else if (this.state.type === "soloFactors"){
+  else if (this.state.type === "SoloFactors"){
     type = this.form(['GndRefernceManuevers','experience','lastLandingPriv','lastLandingComm'])
   }
   return(
     <div>
       <Row>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "localPattern")}>localPattern</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "departure")}>departure</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "enroute")}>enroute</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "destination")}>destination</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "physiology")}>physiology</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "soloFactors")}>soloFactors</Button>
-        </Row>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "LocalPattern")}>localPattern</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Departure")}>departure</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Enroute")}>enroute</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Destination")}>destination</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "Physiology")}>physiology</Button>
+        <Button className="btn dash-btn" onClick={this.switch.bind(this, "SoloFactors")}>soloFactors</Button>
+      </Row>
+      <h1>{this.state.type}</h1>
       {type}
     </div>
   )
 }
 
+// This renders the jumbotron and displays the current form of the limits being modified.
 render() {
   let display
   if (this.state.settings === "VFR"){

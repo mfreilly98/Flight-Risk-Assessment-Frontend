@@ -4,6 +4,7 @@ import './../stylesheets/AdminPanel.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Jumbotron, Row, Col, Form, FormGroup, Button} from 'react-bootstrap';
 
+// This component displays all of current safety limits.
 class CurrentSettings extends Component{
     
     constructor(props) {
@@ -96,11 +97,13 @@ class CurrentSettings extends Component{
                     });
     }
 
-switchCurrent(panel){
-    this.setState({current: panel});
-}
+// This function changes if the vfr limits are being shown or if the ifr limits are being shown.
+    switchCurrent(panel){
+        this.setState({current: panel});
+    }
 
-vfrDisplay() {
+    // This function return the html for the vfr limits.
+    vfrDisplay() {
         return (
             <div>
             <h2>VFR Current Safety Limits</h2>
@@ -194,6 +197,7 @@ vfrDisplay() {
         )
     }
 
+    // This function return the html for the ifr limits.
     ifrDisplay() {
         return (
             <div>
@@ -268,6 +272,7 @@ vfrDisplay() {
         )
     }
 
+    // This renders the jumbotron and the currently selected limits.
     render() {
         let display
         if (this.state.current === "IFR"){
