@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import notams from 'notams';
 
 import FlightDutyFormInput from "./FlightDutyFormInput";
 import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
@@ -35,7 +36,7 @@ function RiskAssessmentForm() {
 
 
     function generateData(){
-        const formattedDepartureDate = moment(departureTime).format("MM/DD/yyyy HH:mm").toString();
+        const formattedDepartureDate = moment(departureTime).utc().format("MM/DD/yyyy HH:mm").toString();
         const data = {'departureTime':formattedDepartureDate,departureAirport,studentName,studentLevel,isDualFlight,prevFlights,flightDuty,categoryOfFlight,typeOfFlight,xcDestination}
         return data;
     }
@@ -44,7 +45,7 @@ function RiskAssessmentForm() {
     function logState(e) {
         /* Remember that setState() is async so console.log my lag behind the state change*/
         e.preventDefault();
-        console.log("-----FlightAssessmentForm State Variables-----")
+        /*console.log("-----FlightAssessmentForm State Variables-----")
         console.log("departureTime: "+departureTime);
         console.log("Departure Airport: "+departureAirport);
         console.log("Student name: "+studentName);
@@ -54,7 +55,17 @@ function RiskAssessmentForm() {
         console.log("flightDuty: "+flightDuty);
         console.log("Category of flight: "+categoryOfFlight);
         console.log("Type of Flight: "+typeOfFlight);
-        console.log("---------------------------------------------")
+        console.log("---------------------------------------------")*/
+        axios({
+            method: 'get',
+            url: "https://notams.aim.faa.gov/notamSearch/nsapp.html?REPORTTYPE=RAW&METHOD=DISPLAYBYICAOS&ACTIONTYPE=NOTAMRETRIEVALBYICAOS&RETRIEVELOCID=KCBF&FORMATTYPE=DOMESTIC#/results",
+            headers: {"Access-Control-Allow-Origin": "*"}
+        }).then(response => {
+            console.log(response.data);
+        });
+         /*notams.fetch(['KCBF'], {format: 'DOMESTIC'}).then( results =>{
+            console.log(JSON.stringify(results));
+        })*/
     }
 
     if( !showDynamicQuestions)
