@@ -73,19 +73,14 @@ function RiskAssessmentForm() {
         console.log("Type of Flight: "+typeOfFlight);
         console.log("---------------------------------------------")
     }
-
     if( !showDynamicQuestions)
     {
         return (
             <Container>
-                <Row>
-                    <Col>
-                        <Jumbotron fluid className="jumbo">
-                            <Link to="/AdminPanel"><Button style={{float: "right"}}>Admin</Button></Link>
-                            <h1 className="text-center">Risk Assessment Form</h1>
-                        </Jumbotron>
-                    </Col>
-                </Row>
+                <Link to="/AdminPanel/SearchStudent" ><Button style={{ float: "right" }} className="btn dash-btn">Admin</Button></Link>
+                <Jumbotron fluid className="jumbo">
+                    <h1 className="text-center">Risk Assessment Form</h1>
+                </Jumbotron>
                 <Form>
                     <Form.Group as={Row} controlId="departureDateAndTime">
                         <Form.Label column md="4" className="align-right">Departure Time and Date: </Form.Label>
