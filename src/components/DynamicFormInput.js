@@ -28,6 +28,7 @@ function DynamicFormInput(props) {
     const [acceptableWinds, setAcceptableWinds] = useState("false");
     const [requireWinds, setRequireWinds] = useState(false);
     const [displayAirSigmets, setDisplayAirSigmets] = useState([]);
+    const [acceptedAirSigmets, setAcceptedAirSigmets] = useState([]);
 
 
     useEffect(() => {
@@ -40,13 +41,16 @@ function DynamicFormInput(props) {
             console.log(response.data);
             setCurrentWeather(response.data);
             checkCrosswind(response.data);
+            let airSigmetAccordionList = [];
+            response.data.airSigmetList.map((item,index) => airSigmetAccordionList.push(<AirSigmetAccordion airSigmet={item} index={index}/> ));
+            setDisplayAirSigmets(airSigmetAccordionList);
         })
     }, []);
 
     function checkCrosswind(data) {
         //TODO: get threshold values from backend
         console.log(currentWeather);
-        setRequireWinds(data.crosswind >= 15 || data.crosswind_gust >= 15 || data.headwind >= 25 || data.headwind_gust >= 25);
+        setRequireWinds(data.crosswind >= 0 || data.crosswind_gust >= 15 || data.headwind >= 25 || data.headwind_gust >= 25);
     }
 
     function getWind(isCrosswind) {
@@ -60,26 +64,6 @@ function DynamicFormInput(props) {
                 return currentWeather.headwind;
             else
                 return currentWeather.headwind + "G" + currentWeather.headwind_gust;
-        }
-    }
-
-    /*This function will toggle modals to display. Since it is a dynamic array of buttons, we need to have a dynamic
-    * number of boolean values to keep track of if each modal has been displayed. */
-    function toggleModal(index){
-        /*If the list doesn't contain an entry for the button, add one.*/
-        if( displayAirSigmets.length < index)
-        {
-            let temp = displayAirSigmets;
-            for (let i = temp.length; i <= index; i++)
-               temp.push(false);
-            temp[index] = true;
-            setDisplayAirSigmets(temp);
-        }
-        else
-        {
-            let temp = displayAirSigmets;
-            temp[index] = !displayAirSigmets[index];
-            setDisplayAirSigmets(temp);
         }
     }
 
@@ -119,13 +103,15 @@ function DynamicFormInput(props) {
                 {currentWeather.airSigmetList.length > 0 &&
                     <Form.Group as={Row}>
                         <Col md="12">
-                            {currentWeather.airSigmetList.map((airSigmet, index) => {
-                                return (<AirSigmetAccordion airSigmet={airSigmet} index={index}/>)
-                            })}
+                            <h3 className="text-center">Airmets and Sigmets</h3>
+                        </Col>
+                        <Col md="12">
+                            <Accordion>
+                                {displayAirSigmets}
+                            </Accordion>
                         </Col>
                     </Form.Group>
                 }
-
             </Form>
 
         </Container>

@@ -1,5 +1,5 @@
-.accordion{
-    padding: .5em 0 .5em 0.3em;
+.airsigmet-card{
+    padding: .15em 0 .15em 0.3em;
 }
 
 .airsigmet-card-header{
@@ -13,14 +13,6 @@
 
 .airsigmet-card-body{
     border-radius: 0px;
-    background-color: #6b6b6b;
+    background-color: #d6d6d6;
     align-self: center;
-}
-
-.airsigmet-card-text{
-    padding-bottom: 3px;
-    display: block;
-    width: 100%;
-    float: left;
-    background-color: #e9e3e3;
 }
