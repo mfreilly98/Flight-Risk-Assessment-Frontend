@@ -6,6 +6,7 @@ import AdminPanelRouter from "./components/AdminPanelRouter";
 
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import React from "react";
+import DynamicFormInput from "./components/DynamicFormInput";
 
 function App() {
   return (
