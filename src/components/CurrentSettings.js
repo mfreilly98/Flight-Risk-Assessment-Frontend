@@ -93,11 +93,27 @@ class CurrentSettings extends Component{
                                 lastLandingComm: {low: 14, med: 28, high: 45},
                             }
                         }, 
-                        current: "IFR"
+                        current: "IFR",
+                        items: [],
                     });
     }
 
-// This function changes if the vfr limits are being shown or if the ifr limits are being shown.
+    getItems() {
+        let items = []
+        fetch("/adminThresholds")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    //this.setState({items: resul})
+                    items = result.items
+                    console.log("result", result)
+                }
+            )
+        console.log(items)
+        return(items)
+    }
+
+    // This function changes if the vfr limits are being shown or if the ifr limits are being shown.
     switchCurrent(panel){
         this.setState({current: panel});
     }
@@ -275,6 +291,8 @@ class CurrentSettings extends Component{
     // This renders the jumbotron and the currently selected limits.
     render() {
         let display
+        let items = this.getItems()
+        console.log(items)
         if (this.state.current === "IFR"){
             display = this.ifrDisplay();
         }
