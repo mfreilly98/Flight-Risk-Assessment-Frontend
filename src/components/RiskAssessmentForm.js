@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Row, Col, Form, Jumbotron, Container} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import notams from 'notams';
 
 import FlightDutyFormInput from "./FlightDutyFormInput";
 import TypeOfFlightFormInput from "./TypeOfFlightFormInput";
@@ -11,9 +12,6 @@ import './../stylesheets/RiskAssessmentForm.css';
 import './../stylesheets/AdminPanel.css';
 import DynamicFormInput from "./DynamicFormInput";
 
-/*
- * This will handle the User input for the risk assessment form.
- */
 function RiskAssessmentForm() {
     /* Departure time and date. Format is MM/dd/yyyy h:mm aa*/
     const [departureTime, setDepartureTime] = useState(new Date());
@@ -36,32 +34,18 @@ function RiskAssessmentForm() {
 
     const [showDynamicQuestions, setShowDynamicQuestions] = useState(false);
 
-    const [currentWeather, setCurrentWeather] = useState();
 
-
-    async function handleClick(){
-
-        const formattedDepartureDate = moment(departureTime).format("MM/DD/yyyy HH:mm").toString();
-        console.log("Time: "+formattedDepartureDate);
-        axios({
-            method: 'post',
-            url: "/basicFormInfo",
-            data: {'departureTime':departureTime,departureAirport,studentName,studentLevel,isDualFlight,prevFlights,flightDuty,categoryOfFlight,typeOfFlight,xcDestination}
-        }).then(response => {
-            console.log(response);
-            setCurrentWeather(response);
-            setShowDynamicQuestions(true);
-        })
+    function generateData(){
+        const formattedDepartureDate = moment(departureTime).utc().format("MM/DD/yyyy HH:mm").toString();
+        const data = {'departureTime':formattedDepartureDate,departureAirport,studentName,studentLevel,isDualFlight,prevFlights,flightDuty,categoryOfFlight,typeOfFlight,xcDestination}
+        return data;
     }
 
-    /*function setTime(date){
-        Moment
-    }*/
     /*Simple logging function. For debugging purposes only.*/
     function logState(e) {
         /* Remember that setState() is async so console.log my lag behind the state change*/
         e.preventDefault();
-        console.log("-----FlightAssessmentForm State Variables-----")
+        /*console.log("-----FlightAssessmentForm State Variables-----")
         console.log("departureTime: "+departureTime);
         console.log("Departure Airport: "+departureAirport);
         console.log("Student name: "+studentName);
@@ -71,7 +55,17 @@ function RiskAssessmentForm() {
         console.log("flightDuty: "+flightDuty);
         console.log("Category of flight: "+categoryOfFlight);
         console.log("Type of Flight: "+typeOfFlight);
-        console.log("---------------------------------------------")
+        console.log("---------------------------------------------")*/
+        axios({
+            method: 'get',
+            url: "https://notams.aim.faa.gov/notamSearch/nsapp.html?REPORTTYPE=RAW&METHOD=DISPLAYBYICAOS&ACTIONTYPE=NOTAMRETRIEVALBYICAOS&RETRIEVELOCID=KCBF&FORMATTYPE=DOMESTIC#/results",
+            headers: {"Access-Control-Allow-Origin": "*"}
+        }).then(response => {
+            console.log(response.data);
+        });
+         /*notams.fetch(['KCBF'], {format: 'DOMESTIC'}).then( results =>{
+            console.log(JSON.stringify(results));
+        })*/
     }
     if( !showDynamicQuestions)
     {
@@ -103,7 +97,7 @@ function RiskAssessmentForm() {
                             name="departure_airport"
                             onChange={e => setDepartureAirport(e.target.value)}
                             className="departureAirport"
-                            colum md="8"
+                            column md="8"
                         />
                     </Form.Group>
                     <Form.Group as={Row} controlId="studentName">
@@ -184,21 +178,21 @@ function RiskAssessmentForm() {
                     />
 
 
-                    <Button className="dash-btn">
-                        <Link to={'DynamicQuestions'} className="dash-btn" onClick={handleClick}>
-                            Next
-                        </Link>
+                    <Button className="dash-btn" onClick={()=>setShowDynamicQuestions(true)}>
+                        Next
                     </Button>
                     <Button className="dash-btn" onClick={logState}>
                         Log State
                     </Button>
                 </Form>
-
             </Container>
         );
     }
-    else
-        return (<DynamicFormInput currentWeather={currentWeather} />)
+    else {
+        const data = generateData();
+        return (<DynamicFormInput requestData={data} />);
+
+    }
 }
 
 
