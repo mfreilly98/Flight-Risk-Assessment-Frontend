@@ -21,6 +21,11 @@
 	background-color: #000000;
 }
 
+.dash-btn {
+	background-color: #000000;
+	color:#FFF;
+	border-color: #FF0000;
+}
 .react-datepicker {
 	font-size: 1.3rem !important;
 }
