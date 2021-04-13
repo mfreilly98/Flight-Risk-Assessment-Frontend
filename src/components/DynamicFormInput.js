@@ -8,6 +8,7 @@ import AirSigmetModal from "./AirSigmetAccordion";
 import './../stylesheets/RiskAssessmentForm.css';
 import './../stylesheets/AdminPanel.css';
 import AirSigmetAccordion from "./AirSigmetAccordion";
+import PirepAccordion from "./PirepAccordion";
 
 
 function DynamicFormInput(props) {
@@ -24,10 +25,11 @@ function DynamicFormInput(props) {
         pireps: [],
         primaryRunway: ''
     });
-    const [isInstrumentCurrent, setIsInstrumentCurrent] = useState("false");
-    const [acceptableWinds, setAcceptableWinds] = useState("false");
+    const [isInstrumentCurrent, setIsInstrumentCurrent] = useState("No");
+    const [acceptableWinds, setAcceptableWinds] = useState("No");
     const [requireWinds, setRequireWinds] = useState(false);
     const [displayAirSigmets, setDisplayAirSigmets] = useState([]);
+    const [displayPireps, setDisplayPireps] = useState([]);
     const [acceptedAirSigmets, setAcceptedAirSigmets] = useState([]);
 
 
@@ -41,16 +43,20 @@ function DynamicFormInput(props) {
             console.log(response.data);
             setCurrentWeather(response.data);
             checkCrosswind(response.data);
-            let airSigmetAccordionList = [];
-            response.data.airSigmetList.map((item,index) => airSigmetAccordionList.push(<AirSigmetAccordion airSigmet={item} index={index}/> ));
-            setDisplayAirSigmets(airSigmetAccordionList);
+            let AirSigmetAccordionList = [];
+            let PirepAccordionList = [];
+            response.data.airSigmetList.map((item,index) => AirSigmetAccordionList.push(<AirSigmetAccordion airSigmet={item} index={index}/> ));
+            response.data.pireps.map((item,index) => PirepAccordionList.push(<PirepAccordion pirep={item} index={index}/> ));
+            setDisplayAirSigmets(AirSigmetAccordionList);
+            setDisplayPireps(PirepAccordionList);
+
         })
     }, []);
 
     function checkCrosswind(data) {
         //TODO: get threshold values from backend
         console.log(currentWeather);
-        setRequireWinds(data.crosswind >= 0 || data.crosswind_gust >= 15 || data.headwind >= 25 || data.headwind_gust >= 25);
+        setRequireWinds(data.crosswind >= 10 || data.crosswind_gust >= 10 || data.headwind >= 15 || data.headwind_gust >= 15);
     }
 
     function getWind(isCrosswind) {
@@ -111,6 +117,19 @@ function DynamicFormInput(props) {
                             </Accordion>
                         </Col>
                     </Form.Group>
+                }
+
+                {currentWeather.pireps.length > 0 &&
+                <Form.Group as={Row}>
+                    <Col md="12">
+                        <h3 className="text-center">Pireps</h3>
+                    </Col>
+                    <Col md="12">
+                        <Accordion>
+                            {displayPireps}
+                        </Accordion>
+                    </Col>
+                </Form.Group>
                 }
             </Form>
 

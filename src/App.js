@@ -13,7 +13,6 @@ function App() {
                 <Switch>
                     <Route exact path="/" component={RiskAssessmentForm}/>
                     <Route exact path="/AdminPanel" component={AdminPanel}/>
-                    <Route exact path="/DynamicQuestions" component={DynamicFormInput} />
                 </Switch>
             </Router>
         </div>
