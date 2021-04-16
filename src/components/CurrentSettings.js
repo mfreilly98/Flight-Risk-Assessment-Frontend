@@ -43,7 +43,7 @@ class CurrentSettings extends Component{
         this.setState({category: panel})
     }
 
-    // This function return the html for the ifr limits.
+    // This function return the html for the limits.
     Display() {
         const listItems = this.state.items.map((value) =>{
         if(value.group === this.state.current && value.category === this.state.category)
