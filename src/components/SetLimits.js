@@ -10,7 +10,9 @@ class SetLimits extends Component {
   constructor(props){
     super(props)
 
-    this.state = ({settings: "ifr", type: "Departure"})
+    this.state = ({settings: "ifr", type: "Departure",max: ""})
+
+    this.change = this.change.bind(this)
   }
 
   // This function takes in a string and switches the subcategory that is being displayed.
@@ -29,13 +31,17 @@ class SetLimits extends Component {
     }
   }
 
+  change(e){
+    this.setState({max: e.target.value})
+  }
+
   // This function updates the safety limits in the database with the value given.
-  update(group, limit, value){
+  update(limit, value, event){
     console.log("category: ", this.state.settings)
     console.log("type: ", this.state.type)
-    console.log("group: ", group)
+    console.log("group: ", event.target.name)
     console.log("limit: ", limit)
-    console.log("value: ", value)
+    console.log("value: ", this.state.max)
   }
 
   // This function takes in a list of strings and maps them to a form that can set lows, mids, and highs for a given parameter then returns that form.
@@ -48,22 +54,22 @@ class SetLimits extends Component {
         <Form.Row>
           <FormGroup>
             <Form.Label>Max: </Form.Label>
-            <Form.Control type="number"></Form.Control>
-            <Button className="btn btn-default" onClick={this.update.bind(this, this.key, "max", "value")}>Set</Button>
+            <Form.Control type="number" onChange={this.change} ></Form.Control>
+            <Button name={item} className="btn btn-default" onClick={this.update.bind(this, "max", "value")}>Set</Button>
           </FormGroup>
         </Form.Row>
         <Form.Row>
           <FormGroup>
             <Form.Label>Mid: </Form.Label>
             <Form.Control type="number"></Form.Control>
-            <Button className="btn btn-default" onClick={this.update.bind(this, this.key, "mid", "value")}>Set</Button>
+            <Button name={item} className="btn btn-default" onClick={this.update.bind(this, "mid", "value")}>Set</Button>
           </FormGroup>
         </Form.Row>
         <Form.Row>
           <FormGroup>
             <Form.Label>Low: </Form.Label>
             <Form.Control type="number"></Form.Control>
-            <Button className="btn btn-default" onClick={this.update.bind(this, this.key, "low", "value")}>Set</Button>
+            <Button name={item} className="btn btn-default" onClick={this.update.bind(this, "low", "value")}>Set</Button>
           </FormGroup>
         </Form.Row>
       </div>
