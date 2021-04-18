@@ -10,24 +10,35 @@ class SetLimits extends Component {
   constructor(props){
     super(props)
 
-    this.state = ({settings: "ifr", type: "Departure",max: ""})
+    this.state = ({group: "ifr", category: "departure", max: "", items: [], loaded: false,})
 
     this.change = this.change.bind(this)
   }
 
+  componentDidMount() {
+    fetch("/adminThresholds")
+      .then(res => res.json())
+      .then(
+          (result) => {
+            this.setState({items: result})
+          }
+      )
+      this.setState({loaded: true})
+    }
+
   // This function takes in a string and switches the subcategory that is being displayed.
   switch(panel){
-    this.setState({type: panel})
+    this.setState({category: panel})
   }
 
   // This function takes in a string and switches the category that is being displayed and sets the subcategory to its default.
   switchCurrent(panel){
-    this.setState({settings: panel})
+    this.setState({group: panel})
     if (panel === "ifr"){
-      this.setState({type: "Departure"})
+      this.setState({category: "departure"})
     }
     else {
-      this.setState({type: "LocalPattern"}) 
+      this.setState({category: "localPattern"}) 
     }
   }
 
@@ -37,143 +48,99 @@ class SetLimits extends Component {
 
   // This function updates the safety limits in the database with the value given.
   update(limit, value, event){
-    console.log("category: ", this.state.settings)
-    console.log("type: ", this.state.type)
+    console.log("group: ", this.state.group)
+    console.log("category: ", this.state.category)
     console.log("group: ", event.target.name)
     console.log("limit: ", limit)
     console.log("value: ", this.state.max)
   }
 
-  // This function takes in a list of strings and maps them to a form that can set lows, mids, and highs for a given parameter then returns that form.
-  form(items){
-    let itemList=[]
-    items.forEach((item)=>{
-      itemList.push(
-      <div key={item}>
-        <h5><b>{item}</b></h5>
-        <Form.Row>
-          <FormGroup>
-            <Form.Label>Max: </Form.Label>
-            <Form.Control type="number" onChange={this.change} ></Form.Control>
-            <Button name={item} className="btn btn-default" onClick={this.update.bind(this, "max", "value")}>Set</Button>
-          </FormGroup>
-        </Form.Row>
-        <Form.Row>
-          <FormGroup>
-            <Form.Label>Mid: </Form.Label>
-            <Form.Control type="number"></Form.Control>
-            <Button name={item} className="btn btn-default" onClick={this.update.bind(this, "mid", "value")}>Set</Button>
-          </FormGroup>
-        </Form.Row>
-        <Form.Row>
-          <FormGroup>
-            <Form.Label>Low: </Form.Label>
-            <Form.Control type="number"></Form.Control>
-            <Button name={item} className="btn btn-default" onClick={this.update.bind(this, "low", "value")}>Set</Button>
-          </FormGroup>
-        </Form.Row>
-      </div>
-      )
+  display(){
+    const itemList = this.state.items.map((item) =>{
+      if(item.ranges !== null && item.group === this.state.group && item.category === this.state.category)
+        return <div key={item.name}>
+            <h5><b>{item.name}</b></h5>
+            <Form.Row>
+              <FormGroup>
+                <Form.Label>Max: </Form.Label>
+                <Form.Control type="number" onChange={this.change} ></Form.Control>
+                <Button name={item.name} className="btn btn-default" onClick={this.update.bind(this, "max", "value")}>Set</Button>
+              </FormGroup>
+            </Form.Row>
+            <Form.Row>
+              <FormGroup>
+                <Form.Label>Mid: </Form.Label>
+                <Form.Control type="number"></Form.Control>
+                <Button name={item.name} className="btn btn-default" onClick={this.update.bind(this, "mid", "value")}>Set</Button>
+              </FormGroup>
+            </Form.Row>
+            <Form.Row>
+              <FormGroup>
+                <Form.Label>Low: </Form.Label>
+                <Form.Control type="number"></Form.Control>
+                <Button name={item.name} className="btn btn-default" onClick={this.update.bind(this, "low", "value")}>Set</Button>
+              </FormGroup>
+            </Form.Row>
+          </div>
     })
-    return (
-      <Form inline className="section">
-      {itemList}
-      </Form>
-    )
-  }
-
-  // This function returns the form to set the limits for ifr.
-  ifr(){
-    let type
-    if (this.state.type === "Departure"){
-      type = this.form(['ceilingDay','ceilingNight','visibility','totalWind','gustIncr','crosswind'])
-    }
-    else if (this.state.type === "Enroute"){
-      type = this.form(['ceilingDay','ceilingNight','visibility','time','thunderstorm','fuelAlt','altAirfield'])
-    }
-    else if (this.state.type === "Destination"){
-      type = this.form(['ceilingDay','ceilingNight','visibility','totalWind','gustIncr','crosswind'])
-    }
-    else if (this.state.type === "Physiology"){
-      type = this.form(['flightTime','flightBegan','prevFlights','outsideTemp'])
-    }
-    return(
-      <div>
+    if (this.state.group === "ifr"){
+      return (
+        <Form inline className="section">
+        <div>
         <Row>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Departure")}>departure</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Enroute")}>enroute</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Destination")}>destination</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Physiology")}>physiology</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "departure")}>departure</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "enroute")}>enroute</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "destination")}>destination</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "physiology")}>physiology</Button>
         </Row>
-        <h1>{this.state.type}</h1>
-        {type}
+        <h1>{this.state.category}</h1>
+        {itemList}
       </div>
-    )
-  }
-
-  // This function returns the form to set the limits for vfr.
-  vfr(){
-    let type
-    if (this.state.type === "LocalPattern"){
-      type = this.form(['ceilingDayDual','ceilingDaySolo','ceilingNight','visibilityDay','visibilityNight','totalWind','gustIncr','crosswind'])
-    }
-    else if (this.state.type === "Departure"){
-      type = this.form(['ceiling','visibility','totalWind','gustIncr','crosswind'])
-    }
-    else if (this.state.type === "Enroute"){
-      type = this.form(['ceiling','visibility','time','fuelAlt'])
-    }
-    else if (this.state.type === "Destination"){
-      type = this.form(['ceiling','visibility','totalWind','gustIncr','crosswind'])
-    }
-    else if (this.state.type === "Physiology"){
-      type = this.form(['flightTime','flightBegan','prevFlights','outsideTemp'])
-    }
-    else if (this.state.type === "SoloFactors"){
-      type = this.form(['GndRefernceManuevers','experience','lastLandingPriv','lastLandingComm'])
-    }
-    return(
-      <div>
+        </Form>
+      )}
+    else{
+      return (
+        <Form inline className="section">
+        <div>
         <Row>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "LocalPattern")}>localPattern</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Departure")}>departure</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Enroute")}>enroute</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Destination")}>destination</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "Physiology")}>physiology</Button>
-          <Button className="btn dash-btn" onClick={this.switch.bind(this, "SoloFactors")}>soloFactors</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "localPattern")}>localPattern</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "departure")}>departure</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "enroute")}>enroute</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "destination")}>destination</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "physiology")}>physiology</Button>
+          <Button className="btn dash-btn" onClick={this.switch.bind(this, "soloFactors")}>soloFactors</Button>
         </Row>
-        <h1>{this.state.type}</h1>
-        {type}
+        <h1>{this.state.category}</h1>
+        {itemList}
       </div>
-    )
+        </Form>
+      )}
   }
 
   // This renders the jumbotron and displays the current form of the limits being modified.
   render() {
-    let display
-    if (this.state.settings === "vfr"){
-      display = this.vfr()
+    if (this.state.loaded == true){
+      return (
+        <div>
+          <Jumbotron fluid className="jumbo">
+            <h1>Admin Panel</h1>
+            <Link to="/AdminPanel/SearchStudent"><Button className="btn dash-btn">Search Students' Forms</Button></Link>
+            <Link to="/AdminPanel/CurrentSettings"><Button className="btn dash-btn">Current Safety Limits</Button></Link>
+            <Link to="/AdminPanel/SetLimits"><Button className="btn dash-btn">Set Safety Limits</Button></Link>
+          </Jumbotron>
+          <Row className="section">
+            <Row>
+              <Button className="btn dash-btn" onClick={this.switchCurrent.bind(this, "ifr")}>IFR Safety Limits</Button>
+              <Button className="btn dash-btn" onClick={this.switchCurrent.bind(this, "vfr")}>VFR Safety Limits</Button>
+            </Row>
+            {this.display()}
+          </Row>
+        </div>
+      )
     }
     else {
-      display = this.ifr()
+      return(<div>The page is loading</div>)
     }
-    return (
-      <div>
-        <Jumbotron fluid className="jumbo">
-          <h1>Admin Panel</h1>
-          <Link to="/AdminPanel/SearchStudent"><Button className="btn dash-btn">Search Students' Forms</Button></Link>
-          <Link to="/AdminPanel/CurrentSettings"><Button className="btn dash-btn">Current Safety Limits</Button></Link>
-          <Link to="/AdminPanel/SetLimits"><Button className="btn dash-btn">Set Safety Limits</Button></Link>
-        </Jumbotron>
-        <Row className="section">
-          <Row>
-            <Button className="btn dash-btn" onClick={this.switchCurrent.bind(this, "ifr")}>IFR Safety Limits</Button>
-            <Button className="btn dash-btn" onClick={this.switchCurrent.bind(this, "vfr")}>VFR Safety Limits</Button>
-          </Row>
-          {display}
-        </Row>
-      </div>
-    )
   }
 }
 export default SetLimits;
