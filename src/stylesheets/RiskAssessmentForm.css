@@ -41,3 +41,23 @@
 	margin: 0.5rem !important;
 }
 
+.display-metar{
+	margin-bottom: 2em;
+}
+
+.vfr{
+	color: #31931c;
+}
+
+.ifr{
+	color: #e0000c
+}
+
+.lifr{
+	color: #d7018f
+}
+
+.error{
+	margin-bottom: 2em;
+	color: red;
+}
